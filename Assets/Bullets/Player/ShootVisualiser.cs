@@ -21,11 +21,16 @@ namespace Bullets.Player
         
         [SerializeField, Tooltip("The material used to draw each point in the trajectory visualisation")]
         private Material shootDisplayMaterial;
+
+        [SerializeField, Tooltip("The size of the visualisation points")]
+        private float size = 0.5f;
         #endregion
         
         // Private fields - only used in this script
         #region PrivateFields
         private PlayerShootInput _shoot;
+        private static readonly int ChargeAmount = Shader.PropertyToID("_ChargeAmount");
+
         #endregion
         
         
@@ -70,12 +75,13 @@ namespace Bullets.Player
             // complex mathematical wizardry that gives us a bunch of Vector3 positions
             var points = Ballistics.GetBallisticPath(shootPoint.position, shootPoint.right, currentShootForce, shootDisplayTimeDelta, time);
             
+            shootDisplayMaterial.SetFloat(ChargeAmount, percentage);
             
             // for each of the points, immediately draw a mesh.
             // Doing it this way means we don't need to bother with gameobjects!
             // Gameobjects have a lot of overhead, so immediately drawing meshes saves a lot of performance
             foreach (var p in points)
-                Graphics.DrawMesh(shootDisplayMesh, Matrix4x4.TRS(p, Quaternion.identity, Vector3.one * 0.25f), shootDisplayMaterial, 0, cam);
+                Graphics.DrawMesh(shootDisplayMesh, Matrix4x4.TRS(p, Quaternion.identity, Vector3.one * size), shootDisplayMaterial, 0, cam);
         }
     }
 }
