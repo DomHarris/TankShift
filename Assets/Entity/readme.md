@@ -1,4 +1,4 @@
-#The CollisionEntity Class
+# The CollisionEntity Class
 This is where most of the magic happens for the tank's character controller. It uses principles from Sebastian Lague's character controller series. In particular, I've used these episodes:
 - https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
 - https://www.youtube.com/watch?v=OBtaLCmJexk&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=2
