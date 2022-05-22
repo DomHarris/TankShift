@@ -9,7 +9,7 @@ namespace Entity
     /// (with some uh minor improvements)
     /// (and a bunch of comments so you can work out what's going on)
     /// </summary>
-    [RequireComponent(typeof(BoxCollider2D)), HelpURL("")]
+    [RequireComponent(typeof(BoxCollider2D)), HelpURL("https://github.com/DomHarris/TankShift/tree/main/Assets/Entity")]
     public class CollisionEntity : MonoBehaviour
     {
         // Constants: values that don't really ever need to change
