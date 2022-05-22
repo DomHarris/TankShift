@@ -241,14 +241,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29e41bdc7747d4a889639abd911b6ed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 7542543265776868388, guid: 1d24678a1f4c84082af795f1a445fd72, type: 3}
   shootPoint: {fileID: 1542048661}
-  speedMultiplier: 1
-  muzzleFlash: {fileID: 0}
-  entity: {fileID: 0}
-  knockbackScale: 0.5
-  player: {fileID: 232343181}
   force: 15
+  target: {fileID: 232343181}
   shootDisplayTimeDelta: 0.1
   cam: {fileID: 519420031}
   shootDisplayMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
@@ -1081,10 +1076,10 @@ MonoBehaviour:
   vcam: {fileID: 30700531}
   normalOrthoSize: 10
   minOrthoSize: 9
+  cameraTarget: {fileID: 1168253327}
   smoothTime: 0.35
   camTargetNormal: 5
   camTargetMax: 7
-  cameraTarget: {fileID: 1168253327}
 --- !u!114 &725970552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1436,6 +1431,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   rayOffset: {x: 0, y: -0.4, z: 0}
+  rayLength: 1
 --- !u!1 &1161917894
 GameObject:
   m_ObjectHideFlags: 0
@@ -1770,6 +1766,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   rayOffset: {x: 0, y: -0.4, z: 0}
+  rayLength: 1
 --- !u!1 &1542048660
 GameObject:
   m_ObjectHideFlags: 0
