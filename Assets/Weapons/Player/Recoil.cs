@@ -14,7 +14,7 @@ namespace Bullets.Player
         [SerializeField,
          Tooltip("How much should this object recoil when it fires, as a percentage of the shoot force")]
         private StatType recoilScale;
-        private float RecoilScale => _stats.Stats.GetStat(recoilScale);
+        private float RecoilScale => _stats.GetStat(recoilScale);
         
         [SerializeField, Tooltip("Where should the bullet shoot from?")] 
         private Transform shootPoint;

@@ -20,15 +20,15 @@ namespace Bullets.Player
 
         [Header("Shooting"), SerializeField, Tooltip("How long will it take to charge the shot?")]
         private StatType maxChargeTime;
-        private float MaxChargeTime => _stats.Stats.GetStat(maxChargeTime);
+        private float MaxChargeTime => _stats.GetStat(maxChargeTime);
         
         
         [SerializeField, Tooltip("What shoot force should we use if the player immediately releases the button?")] 
         private StatType minShootForce;
-        private float MinShootForce => _stats.Stats.GetStat(minShootForce);
+        private float MinShootForce => _stats.GetStat(minShootForce);
         [SerializeField, Tooltip("What shoot force should we use if the player holds the button for MaxChargeTime?")] 
         private StatType maxShootForce;
-        private float MaxShootForce => _stats.Stats.GetStat(maxShootForce);
+        private float MaxShootForce => _stats.GetStat(maxShootForce);
         #endregion
 
         // Private fields - only used in this script

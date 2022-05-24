@@ -13,7 +13,6 @@ namespace Entity.Damage
         private void Awake()
         {
             _entity = GetComponent<PhysicsEntity>();
-            print("");
         }
 
         public void ReceiveHit(HitData data)

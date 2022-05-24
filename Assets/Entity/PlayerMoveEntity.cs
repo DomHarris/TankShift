@@ -15,11 +15,11 @@ namespace Entity
         #region SerializedFields
         [SerializeField, Tooltip("How quickly should the object move, in Unity units per second")] 
         private StatType speed; 
-        private float Speed => _stats.Stats.GetStat(speed);
+        private float Speed => _stats.GetStat(speed);
         
         [SerializeField, Tooltip("How much force should the jetpack apply, in Unity units per second per second")] 
         private StatType jetpackForce; 
-        private float JetpackForce => _stats.Stats.GetStat(jetpackForce);
+        private float JetpackForce => _stats.GetStat(jetpackForce);
         #endregion
         
         // Private fields - only used in this script

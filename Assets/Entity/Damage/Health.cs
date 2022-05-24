@@ -16,7 +16,7 @@ namespace Entity.Damage
         [SerializeField, Tooltip("Which stat type should we use to get the max health?")]
         private StatType maxHealthStat;
 
-        public float MaxHealth => _stats.Stats.GetStat(maxHealthStat);
+        public float MaxHealth => _stats.GetStat(maxHealthStat);
         #endregion
 
         // Events - broadcast a message to any objects that are listening

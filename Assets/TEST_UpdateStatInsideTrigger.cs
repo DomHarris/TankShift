@@ -7,26 +7,36 @@ using UnityEngine;
 public class TEST_UpdateStatInsideTrigger : MonoBehaviour
 {
     [SerializeField] private StatType statToUpdate;
-    [SerializeField] private float newValue;
+    [SerializeField] private float modifier = 0.5f;
     [SerializeField] private float range;
 
-    private Dictionary<StatController, float> _initialValues = new Dictionary<StatController, float>();
+    private List<StatController> _initialValues = new List<StatController>();
+    private StatModifier _modifier;
+
+    private void Awake()
+    {
+        _modifier = new StatModifier
+        {
+            Type = statToUpdate,
+            Value = modifier
+        };
+    }
 
     private void FixedUpdate()
     {
         var collided = Physics2D.OverlapCircle(transform.position, range)?.GetComponent<StatController>();
         if (collided == null)
         {
-            foreach (var kvp in _initialValues)
-                kvp.Key.Stats.SetStat(statToUpdate, kvp.Value);
+            foreach (var controller in _initialValues)
+                controller.RemoveModifier(_modifier);
             _initialValues.Clear();   
         }
         else
         {
-            if (!_initialValues.ContainsKey(collided))
+            if (!_initialValues.Contains(collided))
             {
-                _initialValues.Add(collided, collided.Stats.GetStat(statToUpdate));
-                collided.Stats.SetStat(statToUpdate, newValue);
+                _initialValues.Add(collided);
+                collided.AddModifier(_modifier);
             }
         }
     }
