@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,13 +13,12 @@ namespace Entity.Damage
         // Serialized Fields - set in the Unity Inspector
         #region SerializedFields
         [SerializeField, Tooltip("The UI Image that displays the health percentage as a bar")]
-        private Image image;
-
-        [SerializeField, Tooltip("The text object that shows current health")]
-        private TextMeshProUGUI currentHealthText;
+        private Image bar;
         
-        [SerializeField, Tooltip("The text object that shows max health")]
-        private TextMeshProUGUI maxHealthText;
+        [SerializeField, Tooltip("The UI Image that displays the previous health percentage as a bar")]
+        private Image prevBar;
+
+
 
         [SerializeField, Tooltip("The health object that tells us how much health we've got")]
         private Health health;
@@ -53,9 +53,9 @@ namespace Entity.Damage
         /// <param name="healthPercentage">The percentage value of currentHealth / maxHealth</param>
         private void OnHealthUpdate(float currentHealth, float previousHealth, float maxHealth, float healthPercentage)
         {
-            image.fillAmount = healthPercentage;
-            currentHealthText.text = currentHealth.ToString();
-            maxHealthText.text = maxHealth.ToString();
+            bar.fillAmount = healthPercentage;
+            DOVirtual.Float(prevBar.fillAmount, healthPercentage, 0.2f, val => prevBar.fillAmount = val)
+                .SetEase(Ease.InOutQuint).SetDelay(0.1f);
         }
     }
 }

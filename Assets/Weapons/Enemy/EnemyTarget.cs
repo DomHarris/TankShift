@@ -56,7 +56,6 @@ namespace Bullets.Enemy
         {
             //distance to target
             float distToTarget = Vector2.Distance(transform.position, target.position);
-            print("distToTarget:" + distToTarget); 
             // 25-27 seems to be the max range on SampleScene at start
             if (distToTarget < aggroRange)
             {
