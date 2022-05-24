@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Entity.Stats;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,13 +18,17 @@ namespace Bullets.Player
         [SerializeField, Tooltip("The easing function to use for lerping between the two shoot forces")] 
         private Ease ease;
 
-        [Header("Shooting"), SerializeField, Tooltip("How long will it take to charge the shot?")] 
-        private float maxChargeTime = 3f;
+        [Header("Shooting"), SerializeField, Tooltip("How long will it take to charge the shot?")]
+        private StatType maxChargeTime;
+        private float MaxChargeTime => _stats.Stats.GetStat(maxChargeTime);
+        
         
         [SerializeField, Tooltip("What shoot force should we use if the player immediately releases the button?")] 
-        private float minShootForce = 10f;
+        private StatType minShootForce;
+        private float MinShootForce => _stats.Stats.GetStat(minShootForce);
         [SerializeField, Tooltip("What shoot force should we use if the player holds the button for MaxChargeTime?")] 
-        private float maxShootForce = 15f;
+        private StatType maxShootForce;
+        private float MaxShootForce => _stats.Stats.GetStat(maxShootForce);
         #endregion
 
         // Private fields - only used in this script
@@ -32,15 +37,21 @@ namespace Bullets.Player
         private bool _mouseDown; // is the mouse currently being held down?
         private bool _mouseDownThisFrame; // was the mouse first pressed this frame?
         private bool _mouseUpThisFrame; // was the mouse released this frame?
+        private StatController _stats;
         #endregion
-        
+
+        private void Awake()
+        {
+            _stats = GetComponentInParent<StatController>();
+        }
+
         /// <summary>
         /// Get the current (eased) percentage of the time the player has held the mouse down
         /// </summary>
         /// <returns></returns>
         public float GetPercentage()
         {
-            var percentage = _timer / maxChargeTime;
+            var percentage = _timer / MaxChargeTime;
             percentage = Mathf.Clamp01(percentage);
             percentage = DOVirtual.EasedValue(0, 1, percentage, ease);
             return percentage;
@@ -52,7 +63,7 @@ namespace Bullets.Player
         /// <returns></returns>
         public override float GetShootForce()
         {
-            return Mathf.Lerp(minShootForce, maxShootForce, GetPercentage());
+            return Mathf.Lerp(MinShootForce, MaxShootForce, GetPercentage());
         }
         
         /// <summary>

@@ -2,6 +2,10 @@ using UnityEngine;
 
 namespace Entity
 {
+    namespace Stats
+    {
+    }
+
     /// <summary>
     /// An entity that is affected by physics
     /// </summary>
@@ -65,7 +69,8 @@ namespace Entity
         {
             // if we're colliding above or below, set y velocity to 0
             if (_controller.CollisionInfo.Above || _controller.CollisionInfo.Below)
-                _velocity.y = 0;
+                if (_controller.CollisionInfo.SlidingDownSlope)
+                    _velocity.y += _controller.CollisionInfo.SlopeNormal.y * Physics2D.gravity.y * gravityScale;
             
             // reduce the velocity by drag
             _velocity *= 1-drag;
@@ -73,6 +78,10 @@ namespace Entity
             // add on the gravity force - after drag, because we don't want it to be affected by drag
             _velocity.y += Physics2D.gravity.y * gravityScale;
             
+        }
+
+        private void Update()
+        {
             // move the entity
             _controller.Move(_velocity * Time.deltaTime);
         }

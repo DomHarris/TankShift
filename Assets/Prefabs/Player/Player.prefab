@@ -1010,9 +1010,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ease: 15
-  maxChargeTime: 2
-  minShootForce: 10
-  maxShootForce: 15
+  maxChargeTime: {fileID: 0}
+  minShootForce: {fileID: 0}
+  maxShootForce: {fileID: 0}
 --- !u!114 &8733537958503227328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1076,7 +1076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 8733537959131068216}
-  recoilScale: 2
+  recoilScale: {fileID: 11400000, guid: 7ad86d8bfd96d40559bcb3cc86792f96, type: 2}
   shootPoint: {fileID: 8733537958962920020}
 --- !u!1 &8733537958570206270
 GameObject:
@@ -1347,6 +1347,7 @@ GameObject:
   - component: {fileID: 8733537959131068197}
   - component: {fileID: 8733537959131068196}
   - component: {fileID: 8733537959131068195}
+  - component: {fileID: 1008174560460083044}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -1529,8 +1530,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1196f675c584e5db232c3fff0b31a56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalRayCount: 4
-  verticalRayCount: 4
+  distanceBetweenRaysHorizontal: 0.25
+  distanceBetweenRaysVertical: 0.25
   collisionMask:
     serializedVersion: 2
     m_Bits: 1536
@@ -1548,7 +1549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  jetpackForce: 15
+  jetpackForce: 8
 --- !u!114 &8733537959131068197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1561,7 +1562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40802d3c13260409ca336e52916267cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealthStat: {fileID: 11400000, guid: 4ad60c15059774e91a5dae3aacc99513, type: 2}
 --- !u!114 &8733537959131068196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1591,6 +1592,19 @@ MonoBehaviour:
   currentWeapon: {fileID: 11400000, guid: e7a34f9f406b647e1bfe443176f924a1, type: 2}
   input: {fileID: 8733537958503227343}
   shootPoint: {fileID: 8733537958962920020}
+--- !u!114 &1008174560460083044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8733537959131068222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7c02433e5f4c41a171512db56cd5bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: aa15776365b294d5b9a3561a488ec185, type: 2}
 --- !u!1 &8733537959355302184
 GameObject:
   m_ObjectHideFlags: 0

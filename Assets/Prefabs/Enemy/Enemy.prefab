@@ -90,8 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1196f675c584e5db232c3fff0b31a56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalRayCount: 4
-  verticalRayCount: 4
+  distanceBetweenRaysHorizontal: 0.25
+  distanceBetweenRaysVertical: 0.25
   collisionMask:
     serializedVersion: 2
     m_Bits: 512
@@ -671,27 +671,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 20.079538, y: 3.0047243, z: 0}
-  - {x: 18.626934, y: 3.3788092, z: 0}
-  - {x: 17.17433, y: 3.654794, z: 0}
-  - {x: 15.7217245, y: 3.8326788, z: 0}
-  - {x: 14.269119, y: 3.9124637, z: 0}
-  - {x: 12.816514, y: 3.8941486, z: 0}
-  - {x: 11.363909, y: 3.7777333, z: 0}
-  - {x: 9.9113035, y: 3.563218, z: 0}
-  - {x: 8.458698, y: 3.250603, z: 0}
-  - {x: 7.0060935, y: 2.8398879, z: 0}
-  - {x: 5.5534887, y: 2.3310728, z: 0}
-  - {x: 4.100884, y: 1.7241576, z: 0}
-  - {x: 2.6482792, y: 1.0191424, z: 0}
-  - {x: 1.1956743, y: 0.2160272, z: 0}
-  - {x: -0.2569306, y: -0.685188, z: 0}
-  - {x: -1.7095355, y: -1.6845032, z: 0}
-  - {x: -3.1621404, y: -2.7819185, z: 0}
-  - {x: -4.614745, y: -3.9774337, z: 0}
-  - {x: -6.06735, y: -5.271049, z: 0}
-  - {x: -7.5199547, y: -6.662764, z: 0}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2

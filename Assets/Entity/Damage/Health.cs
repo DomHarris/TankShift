@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Entity.Stats;
 using UnityEngine;
 
 namespace Entity.Damage
@@ -12,8 +13,10 @@ namespace Entity.Damage
     {
         // Serialized Fields - set in the Unity Inspector
         #region SerializedFields
-        [SerializeField, Tooltip("How much health should we start with?")]
-        private float maxHealth;
+        [SerializeField, Tooltip("Which stat type should we use to get the max health?")]
+        private StatType maxHealthStat;
+
+        public float MaxHealth => _stats.Stats.GetStat(maxHealthStat);
         #endregion
 
         // Events - broadcast a message to any objects that are listening
@@ -31,7 +34,13 @@ namespace Entity.Damage
         private float _currentHealth;
         private float _previousHealth;
         private float _healthPercentage;
+        private StatController _stats;
         #endregion
+
+        private void Awake()
+        {
+            _stats = GetComponentInParent<StatController>();
+        }
 
         /// <summary>
         /// Called when the object is enabled
@@ -39,7 +48,7 @@ namespace Entity.Damage
         /// </summary>
         private void OnEnable()
         {
-            _previousHealth = _currentHealth = maxHealth;
+            _previousHealth = _currentHealth = MaxHealth;
         }
 
         /// <summary>
@@ -56,10 +65,10 @@ namespace Entity.Damage
 
             // keep track of the current health as a percentage
             // - doing it here means we only have to do the divide once, and division is a computationally expensive operation
-            _healthPercentage = _currentHealth / maxHealth;
+            _healthPercentage = _currentHealth / MaxHealth;
 
             // tell everything that cares "hey, I've been hit"
-            OnHit?.Invoke(_currentHealth, _previousHealth, maxHealth, _healthPercentage);
+            OnHit?.Invoke(_currentHealth, _previousHealth, MaxHealth, _healthPercentage);
         }
     }
 }

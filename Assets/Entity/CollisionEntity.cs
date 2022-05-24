@@ -31,7 +31,8 @@ namespace Entity
         #region PrivateFields
 
         // The cached results from the raycast - cached here so we don't allocate every frame 
-        private RaycastHit2D[] _results = new RaycastHit2D[NumRaycastResults];
+        private RaycastHit2D[] _resultsMain = new RaycastHit2D[NumRaycastResults];
+        private RaycastHit2D[] _resultsSpare = new RaycastHit2D[NumRaycastResults];
 
         // the collision details for this object this frame
         private CollisionDetails _collisionInfo;
@@ -66,15 +67,15 @@ namespace Entity
                 origin += Vector2.right * (_verticalRaySpacing * i + velocity.x);
                 
                 // fire the ray, see what it hits
-                var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.up * directionY, _results, rayLength, collisionMask);
+                var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.up * directionY, _resultsMain, rayLength, collisionMask);
                 if (numHits > 0) // we hit something! 
                 {
                     // only move to that point. 
-                    velocity.y = (_results[0].distance - SkinWidth) * directionY;
+                    velocity.y = (_resultsMain[0].distance - SkinWidth) * directionY;
                     
                     // set the ray length to this distance so the next rays don't let you move further
                     // without this you'll ignore some objects!
-                    rayLength = _results[0].distance;
+                    rayLength = _resultsMain[0].distance;
 
                     // if we're climbing a slope, alter the vertical velocity
                     if (_collisionInfo.ClimbingSlope)
@@ -85,6 +86,8 @@ namespace Entity
                     // use Mathf.Approximately for those checks instead of "==" because floating point precision can mess things up
                     _collisionInfo.Below = Mathf.Approximately(directionY, -1);
                     _collisionInfo.Above = Mathf.Approximately(directionY, 1);
+                    
+                    _collisionInfo.SlopeNormal = _resultsMain[0].normal;
                 }
                 
                 // draw a ray in the unity editor so we can see what's going on
@@ -99,14 +102,14 @@ namespace Entity
                 float directionX = Mathf.Sign(velocity.x);
                 rayLength = Mathf.Abs(velocity.x) + SkinWidth;
                 var origin = (Mathf.Approximately(directionX, -1) ? _raycastOrigins.BottomLeft : _raycastOrigins.BottomRight) + Vector2.up * velocity.y;
-                var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.right * directionX, _results, rayLength, collisionMask);
+                var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.right * directionX, _resultsMain, rayLength, collisionMask);
                 if (numHits > 0)
                 {
                     // if there's a new slope, use that instead of the old one
-                    float slopeAngle = Vector2.Angle(_results[0].normal, Vector2.up);
+                    float slopeAngle = Vector2.Angle(_resultsMain[0].normal, Vector2.up);
                     if (!Mathf.Approximately(slopeAngle, _collisionInfo.SlopeAngle))
                     {
-                        velocity.x = (_results[0].distance - SkinWidth) * directionX;
+                        velocity.x = (_resultsMain[0].distance - SkinWidth) * directionX;
                         _collisionInfo.SlopeAngle = slopeAngle;
                     }
                 }
@@ -135,15 +138,15 @@ namespace Entity
                 origin += Vector2.up * (_horizontalRaySpacing * i);
                 
                 // fire the ray, see what it hits
-                var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.right * directionX, _results, rayLength, collisionMask);
+                var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.right * directionX, _resultsMain, rayLength, collisionMask);
                 if (numHits > 0) // we hit something!
                 {
                     // ignore collisions if we're inside the object
-                    if (_results[0].distance <= Mathf.Epsilon)
+                    if (_resultsMain[0].distance <= Mathf.Epsilon)
                         continue;
                     
                     // work out the angle of the surface we hit
-                    float slopeAngle = Vector2.Angle(_results[0].normal, Vector2.up);
+                    float slopeAngle = Vector2.Angle(_resultsMain[0].normal, Vector2.up);
                     
                     // if it's a slope and this is the first ray (we only need to check the first one for slopes) and we can actually climb it
                     if (i == 0 && slopeAngle <= maxClimbAngle)
@@ -159,12 +162,12 @@ namespace Entity
                         float distToSlopeStart = 0;
                         if (!Mathf.Approximately(slopeAngle, _collisionInfo.SlopeAngleOld))
                         {
-                            distToSlopeStart = _results[0].distance - SkinWidth;
+                            distToSlopeStart = _resultsMain[0].distance - SkinWidth;
                             velocity.x -= distToSlopeStart * directionX;
                         }
                         
                         // climb the slope
-                        ClimbSlope(ref velocity, slopeAngle);
+                        ClimbSlope(ref velocity, slopeAngle, _resultsMain[0].normal);
                         
                         // fudge the position slightly so we actually end up right at the start of the slope
                         velocity.x += distToSlopeStart * directionX;
@@ -173,11 +176,11 @@ namespace Entity
                     if (!_collisionInfo.ClimbingSlope || slopeAngle > maxClimbAngle)
                     {
                         // only move to that point. 
-                        velocity.x = (_results[0].distance - SkinWidth) * directionX;
+                        velocity.x = (_resultsMain[0].distance - SkinWidth) * directionX;
                         
                         // set the ray length to this distance so the next rays don't let you move further
                         // without this you'll ignore some objects!
-                        rayLength = _results[0].distance;
+                        rayLength = _resultsMain[0].distance;
 
                         // if we're climbing a slope, alter the vertical velocity
                         if (_collisionInfo.ClimbingSlope)
@@ -196,7 +199,7 @@ namespace Entity
         /// </summary>
         /// <param name="velocity">How fast and in which direction are we moving?</param>
         /// <param name="slopeAngle">What's the angle of the slope?</param>
-        private void ClimbSlope(ref Vector3 velocity, float slopeAngle)
+        private void ClimbSlope(ref Vector3 velocity, float slopeAngle, Vector2 slopeNormal)
         {
             // some funky maths here to work out new positions. For more info watch Sebastian Lague's great series, linked above.
             float moveDist = Mathf.Abs(velocity.x);
@@ -208,6 +211,7 @@ namespace Entity
                 _collisionInfo.Below = true;
                 _collisionInfo.ClimbingSlope = true;
                 _collisionInfo.SlopeAngle = slopeAngle;
+                _collisionInfo.SlopeNormal = slopeNormal;
             }
         }
         
@@ -217,17 +221,27 @@ namespace Entity
         /// <param name="velocity">How fast and in which direction are we going?</param>
         private void DescendSlope(ref Vector3 velocity)
         {
+            var numHitsLeft = Physics2D.RaycastNonAlloc(_raycastOrigins.BottomLeft, Vector2.down , _resultsMain, Mathf.Abs(velocity.y) + SkinWidth, collisionMask);
+            var numHitsRight = Physics2D.RaycastNonAlloc(_raycastOrigins.BottomRight, Vector2.down , _resultsSpare, Mathf.Abs(velocity.y) + SkinWidth, collisionMask);
+
+            if (numHitsLeft > 0 ^ numHitsRight > 0)
+            {
+                SlideDownSlope(_resultsMain[0], ref velocity);
+                SlideDownSlope(_resultsSpare[0], ref velocity);
+            }
+
+            if (_collisionInfo.SlidingDownSlope) return;
             float directionX = Mathf.Sign(velocity.x);
             var origin = Mathf.Approximately(directionX, -1) ? _raycastOrigins.BottomRight : _raycastOrigins.BottomLeft;
-            var numHits = Physics2D.RaycastNonAlloc(origin, -Vector2.up , _results, Mathf.Infinity, collisionMask);
+            var numHits = Physics2D.RaycastNonAlloc(origin, -Vector2.up , _resultsMain, Mathf.Infinity, collisionMask);
             if (numHits > 0)
             {
-                float slopeAngle = Vector2.Angle(_results[0].normal, Vector2.up);
+                float slopeAngle = Vector2.Angle(_resultsMain[0].normal, Vector2.up);
                 if (!Mathf.Approximately(slopeAngle, 0) && slopeAngle < maxClimbAngle)
                 {
-                    if (Mathf.Approximately(Mathf.Sign(_results[0].normal.x), directionX))
+                    if (Mathf.Approximately(Mathf.Sign(_resultsMain[0].normal.x), directionX))
                     {
-                        if (_results[0].distance - SkinWidth <= Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(velocity.x))
+                        if (_resultsMain[0].distance - SkinWidth <= Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(velocity.x))
                         {
                             float moveDist = Mathf.Abs(velocity.x);
                             float newVelocityY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDist;
@@ -237,8 +251,25 @@ namespace Entity
                             _collisionInfo.SlopeAngle = slopeAngle;
                             _collisionInfo.DescendingSlope = true;
                             _collisionInfo.Below = true;
+                            _collisionInfo.SlopeNormal = _resultsMain[0].normal;
                         }
                     }
+                }
+            }
+        }
+
+        private void SlideDownSlope(RaycastHit2D hit, ref Vector3 moveAmount)
+        {
+            if (hit)
+            {
+                var slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+                if (slopeAngle > maxClimbAngle)
+                {
+                    moveAmount.x = (Mathf.Abs(moveAmount.y) - hit.distance) / Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * hit.normal.x;
+
+                    _collisionInfo.SlopeAngle = slopeAngle;
+                    _collisionInfo.SlidingDownSlope = true;
+                    _collisionInfo.SlopeNormal = hit.normal;
                 }
             }
         }
@@ -296,8 +327,9 @@ namespace Entity
         {
             public bool Above, Below;
             public bool Left, Right;
-            public bool ClimbingSlope, DescendingSlope;
+            public bool ClimbingSlope, DescendingSlope, SlidingDownSlope;
             public float SlopeAngle, SlopeAngleOld;
+            public Vector2 SlopeNormal;
             public int Direction;
             public Vector3 VelocityOld;
             
@@ -306,9 +338,10 @@ namespace Entity
             /// </summary>
             public void Reset()
             {
-                Above = Below = Left = Right = ClimbingSlope = DescendingSlope = false;
+                Above = Below = Left = Right = ClimbingSlope = DescendingSlope = SlidingDownSlope = false;
                 SlopeAngleOld = SlopeAngle;
                 SlopeAngle = 0;
+                SlopeNormal = Vector2.zero;
             }
         }
     }
