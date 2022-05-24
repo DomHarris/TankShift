@@ -35,12 +35,12 @@ namespace Bullets.Player
             var direction = mouseWorld - transform.position;
 
             // that's the direction we want the turret to point
-            // directly setting the transform's "right" vector to this value will do this for is
+            // directly setting the transform's "right" vector to this value will do this for us
             transform.right = direction;
             
             // get the current angle between the object's up vector and this direction
             float currentAngle = Vector3.Angle(transform.parent.up, direction);
-        
+            
             // if it's less than the min angle, set the "right" vector to the minimum angle
             if (currentAngle < minAngle)
             {

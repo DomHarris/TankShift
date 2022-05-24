@@ -65,7 +65,7 @@ namespace Entity
                     _isFirstFrame = false;
                     _physics.SetForce(Vector2.zero);
                 }
-                _physics.AddForce(Vector2.up * jetpackForce * Time.deltaTime);
+                _physics.AddForce(Vector2.up * jetpackForce);
             }
         }
 

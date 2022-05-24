@@ -42,7 +42,7 @@ namespace Entity
         /// <summary>
         /// Add a force to the object
         /// </summary>
-        /// <param name="force">The force to add, **you probably want to multiply by Time.deltaTime**</param>
+        /// <param name="force">The force to add</param>
         public void AddForce(Vector2 force)
         {
             _velocity += (Vector3)force;
@@ -71,7 +71,7 @@ namespace Entity
             _velocity *= 1-drag;
             
             // add on the gravity force - after drag, because we don't want it to be affected by drag
-            _velocity.y += Physics2D.gravity.y * gravityScale * Time.fixedDeltaTime;
+            _velocity.y += Physics2D.gravity.y * gravityScale;
             
             // move the entity
             _controller.Move(_velocity * Time.deltaTime);

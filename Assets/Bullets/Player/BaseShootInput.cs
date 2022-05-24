@@ -19,7 +19,8 @@ namespace Bullets.Player
         /// </summary>
         protected void InvokeShootEvent()
         {
-            Shoot?.Invoke();
+            if (Shoot != null)
+                Shoot.Invoke();
         }
         
         /// <summary>

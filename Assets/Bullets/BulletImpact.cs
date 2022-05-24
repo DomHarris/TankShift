@@ -1,3 +1,6 @@
+using System;
+using Entity;
+using Entity.Damage;
 using Lean.Pool;
 using UnityEngine;
 
@@ -8,6 +11,12 @@ namespace Bullets
     /// </summary>
     public class BulletImpact : MonoBehaviour
     {
+        // Serialized Fields - set in the Unity Inspector
+        #region SerializedFields
+        [SerializeField, Tooltip("How much damage should this bullet do?")] 
+        private float damage;
+        #endregion
+        
         // Private fields - only used in this script
         #region PrivateFields
         private Rigidbody2D _rb;
@@ -39,6 +48,24 @@ namespace Bullets
         /// <param name="other">The object that was hit</param>
         public void OnCollisionEnter2D(Collision2D other)
         {
+            // get all the scripts attached to the thing we hit that want to know about the hit
+            var hitReceivers = other.gameObject.GetComponents<IHitReceiver>();
+            
+            // create a little object that holds all the relevant data 
+            var damagePacket = new HitData
+            {
+                CollisionInfo = other,
+                Damage = damage,
+                DamageType = DamageType.Projectile,
+                IncomingDirection = transform.right,
+                IncomingObject = gameObject
+            };
+            
+            // tell all the objects that were hit that they were hit, and send the data
+            foreach (var hitReceiver in hitReceivers)
+                hitReceiver.ReceiveHit(damagePacket);
+            
+            // disable this object
             LeanPool.Despawn(_rb);
         }
     }

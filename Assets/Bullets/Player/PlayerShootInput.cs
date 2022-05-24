@@ -73,7 +73,8 @@ namespace Bullets.Player
             {
                 _timer += Time.deltaTime;
                 var percentage = GetPercentage();
-                ShootHold?.Invoke(percentage);
+                if (ShootHold != null)
+                    ShootHold.Invoke(percentage);
             }
             else if (_mouseUpThisFrame)
             {
