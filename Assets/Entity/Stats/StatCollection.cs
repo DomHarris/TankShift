@@ -21,7 +21,7 @@ namespace Entity.Stats
                 throw new NullReferenceException($"Stat {stat.name} is null.");
             }
 
-            throw new Exception($"No stats of type {statType.name} in {name}");
+            throw new Exception($"No stats of type {statType?.name} in {name}");
         }
 
         public void SetStat(StatType statType, float newValue)
@@ -34,7 +34,7 @@ namespace Entity.Stats
                 else
                     throw new NullReferenceException($"Stat {stat.name} is null.");
             } else
-                throw new Exception($"No stats of type {statType.name} in {name}");
+                throw new Exception($"No stats of type {statType?.name} in {name}");
         }
     }
 }

@@ -22,7 +22,6 @@ namespace Entity.Stats
         public void SetValue(float val)
         {
             _runtimeValue = val;
-            Debug.Log($"{name}'s value is now {_runtimeValue}");
         }
     }
 }

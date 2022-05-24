@@ -1,3 +1,4 @@
+using Entity.Stats;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,10 +14,12 @@ namespace Entity
         // Serialized Fields - set in the Unity Inspector
         #region SerializedFields
         [SerializeField, Tooltip("How quickly should the object move, in Unity units per second")] 
-        private float speed = 10f;
+        private StatType speed; 
+        private float Speed => _stats.Stats.GetStat(speed);
         
         [SerializeField, Tooltip("How much force should the jetpack apply, in Unity units per second per second")] 
-        private float jetpackForce = 10f;
+        private StatType jetpackForce; 
+        private float JetpackForce => _stats.Stats.GetStat(jetpackForce);
         #endregion
         
         // Private fields - only used in this script
@@ -28,6 +31,7 @@ namespace Entity
         private Vector2 _moveAmount; // the current input values
         private bool _isJetpack = false; // is the jetpack button being held?
         private bool _isFirstFrame = false; // is it the first frame the jetpack button is being held?
+        private StatController _stats; // the controller object for the entity's stats
         #endregion
         
         /// <summary>
@@ -38,6 +42,7 @@ namespace Entity
         {
             _controller = GetComponent<CollisionEntity>();
             _physics = GetComponent<PhysicsEntity>();
+            _stats = GetComponentInParent<StatController>();
         }
 
         /// <summary>
@@ -47,7 +52,7 @@ namespace Entity
         private void Update()
         {
             // move the character
-            _controller.Move(_moveAmount * Time.deltaTime);
+            _controller.Move(_moveAmount * Speed * Time.deltaTime);
         }
         
         /// <summary>
@@ -65,7 +70,7 @@ namespace Entity
                     _isFirstFrame = false;
                     _physics.SetForce(Vector2.zero);
                 }
-                _physics.AddForce(Vector2.up * jetpackForce);
+                _physics.AddForce(Vector2.up * JetpackForce);
             }
         }
 
@@ -75,7 +80,7 @@ namespace Entity
         /// <param name="ctx">the input actions context, used to get the values for the input</param>
         public void GetInput(InputAction.CallbackContext ctx)
         {
-            _moveAmount = ctx.ReadValue<Vector2>() * speed;
+            _moveAmount = ctx.ReadValue<Vector2>();
             // this is a tank, we don't want to move upwards when we press W ;)
             _moveAmount.y = 0;
         }
