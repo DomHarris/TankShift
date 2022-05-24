@@ -14,11 +14,11 @@ namespace Entity
         
         // Serialized Fields - set in the Unity Inspector
         #region SerializedFields
-        [SerializeField, Tooltip("How many rays should be used for horizontal collision detection?")] 
-        protected int horizontalRayCount = 4;
-        
-        [SerializeField, Tooltip("How many rays should be used for vertical collision detection?")] 
-        protected int verticalRayCount = 4;
+
+        [SerializeField, Tooltip("How far apart should the rays be for horizontal collision detection?")]
+        protected float distanceBetweenRaysHorizontal = 0.25f;
+        [SerializeField, Tooltip("How far apart should the rays be for vertical collision detection?")]
+        protected float distanceBetweenRaysVertical = 0.25f;
         #endregion
         
         // Collider
@@ -27,6 +27,8 @@ namespace Entity
         
         // Raycasts
         protected RaycastOrigins _raycastOrigins; // the origin points for the raycasts
+        protected int _horizontalRayCount;
+        protected int _verticalRayCount;
         protected float _horizontalRaySpacing; // how far apart should the rays be, horizontally? Calculated using ray count in Awake
         protected float _verticalRaySpacing; // how far apart should the rays be, horizontally?
         
@@ -61,11 +63,14 @@ namespace Entity
         {
             _bounds = _collider.bounds;
             _bounds.Expand(SkinWidth * -2f);
-            horizontalRayCount = Mathf.Max(2, horizontalRayCount);
-            verticalRayCount = Mathf.Max(2, verticalRayCount);
+            
+            
+            
+            _horizontalRayCount = Mathf.Max(2, Mathf.RoundToInt(_bounds.size.y / distanceBetweenRaysHorizontal));
+            _verticalRayCount = Mathf.Max(2, Mathf.RoundToInt(_bounds.size.x / distanceBetweenRaysVertical));
 
-            _horizontalRaySpacing = _bounds.size.y / (horizontalRayCount - 1);
-            _verticalRaySpacing = _bounds.size.x / (verticalRayCount - 1);
+            _horizontalRaySpacing = _bounds.size.y / (_horizontalRayCount - 1);
+            _verticalRaySpacing = _bounds.size.x / (_verticalRayCount - 1);
         }
     
         /// <summary>

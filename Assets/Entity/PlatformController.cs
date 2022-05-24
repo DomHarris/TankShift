@@ -7,6 +7,15 @@ namespace Entity
 {
     public class PlatformController : RaycastController
     {
+        private struct PassengerMovement
+        {
+            public Transform Transform;
+            public CollisionEntity CollisionEntity;
+            public Vector3 Velocity;
+            public bool OnPlatform;
+            public bool MoveBefore;
+        }
+        
         [SerializeField] private LayerMask passengerMask;
         
         // Constants: values that don't really ever need to change
@@ -21,6 +30,7 @@ namespace Entity
         private RaycastHit2D[] _results = new RaycastHit2D[NumRaycastResults];
 
 
+        private List<PassengerMovement> _passengerMovements = new List<PassengerMovement>();
         private HashSet<CollisionEntity> _passengers = new HashSet<CollisionEntity>();
         private Vector3 _previousPosition;
         private Vector3 _velocity;
@@ -36,14 +46,23 @@ namespace Entity
         {
             _velocity = (transform.position - _previousPosition);
             UpdateRaycastOrigins();
-            MovePassengers(_velocity);
+            MovePassengers(true);
+            CalculatePassengerMovement(_velocity);
             _previousPosition = transform.position;
+            MovePassengers(false);
         }
 
+        void MovePassengers(bool beforeMovePlatform)
+        {
+            foreach (var move in _passengerMovements)
+                if (move.MoveBefore == beforeMovePlatform)
+                    move.CollisionEntity.Move(move.Velocity, move.OnPlatform);
+        }
 
-        private void MovePassengers(Vector3 velocity)
+        private void CalculatePassengerMovement(Vector3 velocity)
         {
             _passengers.Clear();
+            _passengerMovements.Clear();
             float directionX = Mathf.Sign(velocity.x);
             float directionY = Mathf.Sign(velocity.y);
 
@@ -53,7 +72,7 @@ namespace Entity
                 float rayLength = Mathf.Abs(velocity.y) + SkinWidth;
 
                 // for each ray
-                for (int i = 0; i < verticalRayCount; ++i)
+                for (int i = 0; i < _verticalRayCount; ++i)
                 {
                     // if we're going up, use the bottom left corner. If we're going down, use the top right corner
                     var origin = Mathf.Approximately(directionY, -1)
@@ -74,7 +93,14 @@ namespace Entity
                             _passengers.Add(entity);
                             var pushX = Mathf.Approximately(directionY, 1) ? velocity.x : 0;
                             var pushY = velocity.y - (_results[0].distance - SkinWidth) * directionY;
-                            entity.Move(new Vector3(pushX, pushY));
+                            _passengerMovements.Add(new PassengerMovement
+                            {
+                                Transform = entity.transform,
+                                Velocity = new Vector3(pushX, pushY),
+                                CollisionEntity = entity,
+                                OnPlatform = Mathf.Approximately(directionY, 1),
+                                MoveBefore = true
+                            });
                         }
                     }
                 }
@@ -86,7 +112,7 @@ namespace Entity
                 // how far should we check? 
                 float rayLength = SkinWidth * 2;
                 // for each ray
-                for (int i = 0; i < verticalRayCount; ++i)
+                for (int i = 0; i < _verticalRayCount; ++i)
                 {
 
                     // if we're going up, use the bottom left corner. If we're going down, use the top right corner
@@ -103,7 +129,14 @@ namespace Entity
                             _passengers.Add(entity);
                             var pushX = velocity.x;
                             var pushY = velocity.y;
-                            entity.Move(new Vector3(pushX, pushY));
+                            _passengerMovements.Add(new PassengerMovement
+                            {
+                                Transform = entity.transform,
+                                Velocity = new Vector3(pushX, pushY),
+                                CollisionEntity = entity,
+                                OnPlatform = true,
+                                MoveBefore = false
+                            });
                         }
                     }
                 }

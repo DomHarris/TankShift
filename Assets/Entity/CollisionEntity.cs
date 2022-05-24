@@ -57,7 +57,7 @@ namespace Entity
             float rayLength = Mathf.Abs(velocity.y) + SkinWidth;
 
             // for each ray
-            for (int i = 0; i < verticalRayCount; ++i)
+            for (int i = 0; i < _verticalRayCount; ++i)
             {
                 // if we're going up, use the bottom left corner. If we're going down, use the top right corner
                 var origin = Mathf.Approximately(directionY, -1) ? _raycastOrigins.BottomLeft : _raycastOrigins.TopLeft;
@@ -126,7 +126,7 @@ namespace Entity
             float rayLength = Mathf.Abs(velocity.x) + SkinWidth;
 
             // for each ray
-            for (int i = 0; i < horizontalRayCount; ++i)
+            for (int i = 0; i < _horizontalRayCount; ++i)
             {
                 // if we're going left, use the bottom left corner. If we're going right, use the bottom right corner
                 var origin = Mathf.Approximately(directionX, -1) ? _raycastOrigins.BottomLeft : _raycastOrigins.BottomRight;
@@ -138,6 +138,10 @@ namespace Entity
                 var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.right * directionX, _results, rayLength, collisionMask);
                 if (numHits > 0) // we hit something!
                 {
+                    // ignore collisions if we're inside the object
+                    if (_results[0].distance <= Mathf.Epsilon)
+                        continue;
+                    
                     // work out the angle of the surface we hit
                     float slopeAngle = Vector2.Angle(_results[0].normal, Vector2.up);
                     
@@ -243,7 +247,7 @@ namespace Entity
         /// Move this object
         /// </summary>
         /// <param name="amount">How much are we moving it by?</param>
-        public void Move(Vector3 amount)
+        public void Move(Vector3 amount, bool onPlatform = false)
         {
             // update the raycast origins so we know where the raycasts should fire from
             UpdateRaycastOrigins();
@@ -272,6 +276,9 @@ namespace Entity
             
             // set the collision direction to -1 if we're moving left, 1 if we're moving right
             _collisionInfo.Direction = Mathf.RoundToInt(Mathf.Sign(amount.x));
+
+            if (onPlatform)
+                _collisionInfo.Below = true;
             
             // if we're moving at all, update the physics transforms
             // same deal with checking against Epsilon vs == 0 here 
