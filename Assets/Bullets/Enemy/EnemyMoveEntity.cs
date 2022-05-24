@@ -18,6 +18,9 @@ namespace Entity
         [SerializeField, Tooltip("Modifies range of aggression in relation to player")]
         float aggroRange;
 
+        [SerializeField, Tooltip("Distance the enemy stops when near the player")]
+        float stopDistance;
+
         [SerializeField, Tooltip("The target object")]
         private Transform target;
 
@@ -57,6 +60,17 @@ namespace Entity
         }
 
         /// <summary>
+        /// FOR TESTING ONLY
+        /// This is to view aggroRange and stopDistance in red and green respectively
+        /// </summary>
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, aggroRange);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, stopDistance);
+        }
+        /// <summary>
         /// Called every frame.
         /// Use the input to move the character
         /// </summary>
@@ -69,35 +83,40 @@ namespace Entity
                 //distance to target
                 float distToTarget = Vector2.Distance(transform.position, target.position);
                 // print("distToTarget:" + distToTarget); 25-27 seems to be the max range on SampleScene at start
-                if (distToTarget < aggroRange)
+                if (distToTarget < aggroRange && distToTarget >= stopDistance)
                 {
                     // code to chase target
                     chaseTarget();
                 }
-                else
-                {
-                    // stop chasing target
-                    stopChaseTarget();
-                }
+                else if (distToTarget <= stopDistance)
+                    retreatTarget();
             }
         }
         private void chaseTarget()
-        {
-            if (transform.position.x < target.position.x)
+        {   //If the target is to the left of the enemy, it will move right
+            if (transform.position.x < target.position.x) 
             {
                 // this is where rb2d was supposed to be used, not sure how to utilize it however
                 // refer to line 22 and 52 in EnemyMoveEntity script
                 _controller.Move(new Vector2(speed * Time.deltaTime, 0));
             }
+            //If the target is to the right of the enemy, it will move left
             else if (transform.position.x > target.position.x)
             {
                 _controller.Move(new Vector2(-speed * Time.deltaTime, 0));
             }
         }
-        private void stopChaseTarget()
+        
+        private void retreatTarget()
         {
-            // refer to line 72-73 above   REFER TO YouTube vid youtube.com/watch?v=nEYA3hzZHJ0
-            _controller.Move(new Vector2(0, 0));
+            if (transform.position.x < target.position.x)
+            {
+                _controller.Move(new Vector2(-speed * Time.deltaTime, 0));
+            }
+            else if (transform.position.x > target.position.x)
+            {
+                _controller.Move(new Vector2(speed * Time.deltaTime, 0));
+            }
         }
 
         
