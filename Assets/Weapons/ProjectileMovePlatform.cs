@@ -1,9 +1,8 @@
 using DG.Tweening;
 using Entity.Damage;
-using UnityEditor.U2D;
 using UnityEngine;
 
-namespace Bullets
+namespace Weapons
 {
     public class ProjectileMovePlatform : MonoBehaviour, IHitReceiver
     {
