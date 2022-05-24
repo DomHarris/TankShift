@@ -245,6 +245,7 @@ MonoBehaviour:
   shootPoint: {fileID: 1542048661}
   force: 15
   target: {fileID: 232343181}
+  aggroRange: 20
   secondsOfTargeting: 3
   secondsBeforeShoot: 1
   secondsAfterShoot: 2
@@ -282,13 +283,14 @@ GameObject:
   - component: {fileID: 126144416}
   - component: {fileID: 126144415}
   - component: {fileID: 126144419}
+  - component: {fileID: 126144420}
   m_Layer: 10
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &126144415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,6 +380,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockbackAmount: 5
   damageTypes: 0
+--- !u!114 &126144420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126144414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 066652bc092de447c98a088f522a4a84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 232343181}
+  aggroRange: 20
+  target: {fileID: 232343181}
+  speed: 5
+  jetpackForce: 10
 --- !u!1 &155840676
 GameObject:
   m_ObjectHideFlags: 0
