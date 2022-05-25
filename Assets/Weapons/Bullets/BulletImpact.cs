@@ -11,6 +11,9 @@ namespace Bullets
     /// </summary>
     public class BulletImpact : MonoBehaviour
     {
+        #region Events
+        public event Action<HitData> Hit;
+        #endregion
         // Serialized Fields - set in the Unity Inspector
         #region SerializedFields
         [SerializeField, Tooltip("How much damage should this bullet do?")] 
@@ -64,6 +67,8 @@ namespace Bullets
             // tell all the objects that were hit that they were hit, and send the data
             foreach (var hitReceiver in hitReceivers)
                 hitReceiver.ReceiveHit(damagePacket);
+            
+            Hit?.Invoke(damagePacket);
             
             // disable this object
             LeanPool.Despawn(_rb);

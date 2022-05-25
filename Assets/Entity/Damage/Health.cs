@@ -13,7 +13,7 @@ namespace Entity.Damage
     {
         // Serialized Fields - set in the Unity Inspector
         #region SerializedFields
-        [SerializeField, Tooltip("Which stat type should we use to get the max health?")]
+        [SerializeField, Tooltip("Which stat type should we use to get the max health?"), StatTypeWithParent]
         private StatType maxHealthStat;
 
         public float MaxHealth => _stats.GetStat(maxHealthStat);

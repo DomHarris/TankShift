@@ -8,12 +8,14 @@ namespace Weapons.Player
     {
         [NonSerialized] protected BaseShootInput _input;
         [NonSerialized] protected Transform _shootPoint;
+        [NonSerialized] protected float _fireRate;
 
-        public virtual void Init(BaseShootInput input, Transform shootPoint)
+        public virtual void Init(BaseShootInput input, Transform shootPoint, float fireRate)
         {
             _input = input;
             _shootPoint = shootPoint;
             _input.Shoot += OnShoot;
+            _fireRate = fireRate;
         }
 
         public virtual void Dispose()

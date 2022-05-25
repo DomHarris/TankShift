@@ -1348,6 +1348,7 @@ GameObject:
   - component: {fileID: 8733537959131068196}
   - component: {fileID: 8733537959131068195}
   - component: {fileID: 1008174560460083044}
+  - component: {fileID: 4173940571257392921}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -1548,8 +1549,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5883ce04d4ec4d24a5422b5e50c33e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  jetpackForce: 8
+  speed: {fileID: 0}
+  jetpackForce: {fileID: 0}
 --- !u!114 &8733537959131068197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1575,7 +1576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6db8a248bc40b1ab134f219deef1fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackAmount: 5
+  knockbackAmount: {fileID: 0}
   damageTypes: 0
 --- !u!114 &8733537959131068195
 MonoBehaviour:
@@ -1592,6 +1593,7 @@ MonoBehaviour:
   currentWeapon: {fileID: 11400000, guid: e7a34f9f406b647e1bfe443176f924a1, type: 2}
   input: {fileID: 8733537958503227343}
   shootPoint: {fileID: 8733537958962920020}
+  fireRate: {fileID: 0}
 --- !u!114 &1008174560460083044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1605,6 +1607,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: aa15776365b294d5b9a3561a488ec185, type: 2}
+--- !u!114 &4173940571257392921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8733537959131068222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8af796f8450461c90cd74c00d3c0bb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  label: 0
 --- !u!1 &8733537959355302184
 GameObject:
   m_ObjectHideFlags: 0

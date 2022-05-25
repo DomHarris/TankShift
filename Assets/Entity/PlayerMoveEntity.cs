@@ -13,11 +13,11 @@ namespace Entity
     {
         // Serialized Fields - set in the Unity Inspector
         #region SerializedFields
-        [SerializeField, Tooltip("How quickly should the object move, in Unity units per second")] 
+        [SerializeField, Tooltip("How quickly should the object move, in Unity units per second"), StatTypeWithParent] 
         private StatType speed; 
         private float Speed => _stats.GetStat(speed);
         
-        [SerializeField, Tooltip("How much force should the jetpack apply, in Unity units per second per second")] 
+        [SerializeField, Tooltip("How much force should the jetpack apply, in Unity units per second per second"), StatTypeWithParent] 
         private StatType jetpackForce; 
         private float JetpackForce => _stats.GetStat(jetpackForce);
         #endregion

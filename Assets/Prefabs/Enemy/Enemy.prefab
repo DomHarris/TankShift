@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 5494232159584016246}
   - component: {fileID: 5494232159584016202}
   - component: {fileID: 5494232159584016205}
+  - component: {fileID: 1976949469}
+  - component: {fileID: 1976949470}
   m_Layer: 10
   m_Name: Enemy
   m_TagString: Untagged
@@ -108,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6db8a248bc40b1ab134f219deef1fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackAmount: 5
+  knockbackAmount: {fileID: 11400000, guid: 7b8a68a5cc79745b4bfa832c4921dd13, type: 2}
   damageTypes: 0
 --- !u!114 &5494232159584016205
 MonoBehaviour:
@@ -128,6 +130,32 @@ MonoBehaviour:
   target: {fileID: 0}
   speed: 5
   jetpackForce: 10
+--- !u!114 &1976949469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5494232159584016247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7c02433e5f4c41a171512db56cd5bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: d6afa32af1051402b81dd56d7a32e5b2, type: 2}
+--- !u!114 &1976949470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5494232159584016247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40802d3c13260409ca336e52916267cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthStat: {fileID: 11400000, guid: 4ad60c15059774e91a5dae3aacc99513, type: 2}
 --- !u!1 &5494232159620041066
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,7 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootPoint: {fileID: 5494232160328307580}
-  force: 15
+  force: 10
   target: {fileID: 0}
   aggroRange: 16
   secondsOfTargeting: 2
@@ -216,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 5494232159584016201}
-  recoilScale: 1
+  recoilScale: {fileID: 11400000, guid: 7ad86d8bfd96d40559bcb3cc86792f96, type: 2}
   shootPoint: {fileID: 5494232160328307580}
 --- !u!114 &5494232159620041070
 MonoBehaviour:

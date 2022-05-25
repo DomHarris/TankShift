@@ -11,8 +11,7 @@ namespace Bullets.Player
         [SerializeField, Tooltip("The physics entity, used for recoil calculations")] 
         private PhysicsEntity entity;
 
-        [SerializeField,
-         Tooltip("How much should this object recoil when it fires, as a percentage of the shoot force")]
+        [SerializeField, Tooltip("How much should this object recoil when it fires, as a percentage of the shoot force"), StatTypeWithParent]
         private StatType recoilScale;
         private float RecoilScale => _stats.GetStat(recoilScale);
         
