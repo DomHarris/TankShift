@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88042dfc75541caa47acb0fa99fd8ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a39962eaa5f4d66964ca9b4f35cc275, type: 3}
   m_Name: BasicTank.MaxHealth
   m_EditorClassIdentifier: 
   type: {fileID: 11400000, guid: 4ad60c15059774e91a5dae3aacc99513, type: 2}

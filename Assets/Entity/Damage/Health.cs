@@ -15,9 +15,9 @@ namespace Entity.Damage
         #region SerializedFields
         [SerializeField, Tooltip("Which stat type should we use to get the max health?"), StatTypeWithParent]
         private StatType maxHealthStat;
-
-        public float MaxHealth => _stats.GetStat(maxHealthStat);
         #endregion
+        
+        public float MaxHealth => _stats.GetStat(maxHealthStat);
 
         // Events - broadcast a message to any objects that are listening
         #region Events
@@ -31,12 +31,19 @@ namespace Entity.Damage
 
         // Private fields - only used in this script
         #region PrivateFields
+        // some private variables to track various health values
         private float _currentHealth;
         private float _previousHealth;
         private float _healthPercentage;
+        // the stat controller that contains the max health amount
         private StatController _stats;
         #endregion
 
+        
+        /// <summary>
+        /// Called when the game loads
+        /// Grab any references we need
+        /// </summary>
         private void Awake()
         {
             _stats = GetComponentInParent<StatController>();

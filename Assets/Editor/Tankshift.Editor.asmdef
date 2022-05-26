@@ -1,0 +1,19 @@
+{
+    "name": "Tankshift.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:942d3cc28131c4fd5b88dec7ddb83ac7",
+        "GUID:2b515b486afc748209afec1cfbacde86"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -18,8 +18,11 @@ namespace Entity.Damage
         [SerializeField, Tooltip("The UI Image that displays the previous health percentage as a bar")]
         private Image prevBar;
 
-
-
+        [SerializeField, Tooltip("How long do we wait before moving the secondary bar?")] 
+        private float delay = 0.1f;
+        
+        [SerializeField, Tooltip("How long should the secondary bar take to move?")] 
+        private float timeToFill = 0.2f;
         [SerializeField, Tooltip("The health object that tells us how much health we've got")]
         private Health health;
         #endregion
@@ -53,9 +56,13 @@ namespace Entity.Damage
         /// <param name="healthPercentage">The percentage value of currentHealth / maxHealth</param>
         private void OnHealthUpdate(float currentHealth, float previousHealth, float maxHealth, float healthPercentage)
         {
+            // immediately set the main health bar's fill amount
             bar.fillAmount = healthPercentage;
-            DOVirtual.Float(prevBar.fillAmount, healthPercentage, 0.2f, val => prevBar.fillAmount = val)
-                .SetEase(Ease.InOutQuint).SetDelay(0.1f);
+            
+            // a white, secondary health bar smoothly animates to the current health percentage after a delay
+            // this helps the player visualise how much damage has been done
+            // and also looks really cool
+            DOVirtual.Float(prevBar.fillAmount, healthPercentage, timeToFill, val => prevBar.fillAmount = val).SetEase(Ease.InOutQuint).SetDelay(delay);
         }
     }
 }

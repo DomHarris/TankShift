@@ -29,7 +29,6 @@ namespace Entity
         
         // Private fields - only used in this script
         #region PrivateFields
-
         // The cached results from the raycast - cached here so we don't allocate every frame 
         private RaycastHit2D[] _resultsMain = new RaycastHit2D[NumRaycastResults];
         private RaycastHit2D[] _resultsSpare = new RaycastHit2D[NumRaycastResults];
@@ -87,6 +86,7 @@ namespace Entity
                     _collisionInfo.Below = Mathf.Approximately(directionY, -1);
                     _collisionInfo.Above = Mathf.Approximately(directionY, 1);
                     
+                    // store the slope normal in the collision info so we can access it later
                     _collisionInfo.SlopeNormal = _resultsMain[0].normal;
                 }
                 
@@ -221,33 +221,46 @@ namespace Entity
         /// <param name="velocity">How fast and in which direction are we going?</param>
         private void DescendSlope(ref Vector3 velocity)
         {
+            // Check both bottom corners
             var numHitsLeft = Physics2D.RaycastNonAlloc(_raycastOrigins.BottomLeft, Vector2.down , _resultsMain, Mathf.Abs(velocity.y) + SkinWidth, collisionMask);
             var numHitsRight = Physics2D.RaycastNonAlloc(_raycastOrigins.BottomRight, Vector2.down , _resultsSpare, Mathf.Abs(velocity.y) + SkinWidth, collisionMask);
 
+            // only slide down the slope if ONE and only one of the corners is colliding
+            // (fixes a small bug)
             if (numHitsLeft > 0 ^ numHitsRight > 0)
             {
                 SlideDownSlope(_resultsMain[0], ref velocity);
                 SlideDownSlope(_resultsSpare[0], ref velocity);
             }
 
+            // if we're already sliding down a slope, exit early - we don't need to do anything else
             if (_collisionInfo.SlidingDownSlope) return;
+            
+            
             float directionX = Mathf.Sign(velocity.x);
+            // check the ground below. If we're on a surface and we're moving down it, we should alter the movement speed so we don't bounce
             var origin = Mathf.Approximately(directionX, -1) ? _raycastOrigins.BottomRight : _raycastOrigins.BottomLeft;
             var numHits = Physics2D.RaycastNonAlloc(origin, -Vector2.up , _resultsMain, Mathf.Infinity, collisionMask);
+            
             if (numHits > 0)
             {
                 float slopeAngle = Vector2.Angle(_resultsMain[0].normal, Vector2.up);
+                // if the slope angle is less than the maxClimbAngle, we can walk down it
+                // (if it's greater than, we're handling that in SlideDownSlope)
                 if (!Mathf.Approximately(slopeAngle, 0) && slopeAngle < maxClimbAngle)
                 {
+                    // if we're moving down the slope rather up it
                     if (Mathf.Approximately(Mathf.Sign(_resultsMain[0].normal.x), directionX))
                     {
                         if (_resultsMain[0].distance - SkinWidth <= Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(velocity.x))
                         {
+                            // work out the new velocity based on some pythagoras stuff
                             float moveDist = Mathf.Abs(velocity.x);
                             float newVelocityY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDist;
                             velocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDist * Mathf.Sign(velocity.x);
                             velocity.y -= newVelocityY;
-
+                            
+                            // store all the relevant info in the collision info
                             _collisionInfo.SlopeAngle = slopeAngle;
                             _collisionInfo.DescendingSlope = true;
                             _collisionInfo.Below = true;
@@ -258,15 +271,24 @@ namespace Entity
             }
         }
 
+        /// <summary>
+        /// Slide down a slope
+        /// </summary>
+        /// <param name="hit"></param>
+        /// <param name="moveAmount"></param>
         private void SlideDownSlope(RaycastHit2D hit, ref Vector3 moveAmount)
         {
+            // if we're on a slope
             if (hit)
             {
                 var slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+                // and that slope is greater than our max climb angle
                 if (slopeAngle > maxClimbAngle)
                 {
+                    // automatically move down the slope
                     moveAmount.x = (Mathf.Abs(moveAmount.y) - hit.distance) / Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * hit.normal.x;
 
+                    // store the relevant info
                     _collisionInfo.SlopeAngle = slopeAngle;
                     _collisionInfo.SlidingDownSlope = true;
                     _collisionInfo.SlopeNormal = hit.normal;
@@ -308,6 +330,8 @@ namespace Entity
             // set the collision direction to -1 if we're moving left, 1 if we're moving right
             _collisionInfo.Direction = Mathf.RoundToInt(Mathf.Sign(amount.x));
 
+            // if we're on a platform, we've definitely got something below us
+            // (the platform)
             if (onPlatform)
                 _collisionInfo.Below = true;
             

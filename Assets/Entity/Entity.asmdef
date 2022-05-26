@@ -2,7 +2,8 @@
     "name": "Entity",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:2b515b486afc748209afec1cfbacde86"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
