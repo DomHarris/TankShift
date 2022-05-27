@@ -53,7 +53,6 @@ namespace Bullets
         {
             // get all the scripts attached to the thing we hit that want to know about the hit
             var hitReceivers = other.gameObject.GetComponents<IHitReceiver>();
-            
             // create a little object that holds all the relevant data 
             var damagePacket = new HitData
             {
