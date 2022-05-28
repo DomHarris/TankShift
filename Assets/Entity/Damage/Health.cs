@@ -69,7 +69,6 @@ namespace Entity.Damage
 
             // keep track of what the health currently is 
             _currentHealth -= data.Damage;
-
             // keep track of the current health as a percentage
             // - doing it here means we only have to do the divide once, and division is a computationally expensive operation
             _healthPercentage = _currentHealth / MaxHealth;

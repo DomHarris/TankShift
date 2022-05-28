@@ -1,4 +1,5 @@
 using System;
+using Utils;
 
 namespace Entity.Stats
 {
@@ -9,6 +10,7 @@ namespace Entity.Stats
     public class StatModifier
     {
         // the StatType to modify
+        [ScriptableObjectDropdown(typeof(StatType))]
         public StatType Type;
         // a multiplier for the stat type. 
         public float Multiplier;

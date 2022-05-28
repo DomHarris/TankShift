@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Bullets
 {
-    public class HitFX : MonoBehaviour, IHitReceiver
+    public class HitShrink : MonoBehaviour, IHitReceiver
     {
         [SerializeField] private float endSize = -0.1f;
         [SerializeField] private float time = 0.1f;

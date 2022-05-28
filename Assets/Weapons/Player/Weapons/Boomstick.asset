@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b22b6f25da34a39a7ca8c01f5e3e43c, type: 3}
+  m_Name: Boomstick
+  m_EditorClassIdentifier: 
+  shortDescription: make things go boom
+  description: 'Shells explode, causing damage in a radius.
+
+    Fire rate is slower.
+
+    Range
+    is lower.'
+  features:
+  - Type: {fileID: 21300000, guid: ec136aa6ee3444ed0894cc03f1fc1524, type: 3}
+    Description: Splash Damage
+    StatModifiers: []
+  - Type: {fileID: 21300000, guid: 9f843deab74f942158c50349efd005e9, type: 3}
+    Description: Fire rate
+    StatModifiers:
+    - Type: {fileID: 11400000, guid: db0838f806cb0412784f157452ddaa65, type: 2}
+      Multiplier: 2
+  - Type: {fileID: 21300000, guid: 9f843deab74f942158c50349efd005e9, type: 3}
+    Description: Range
+    StatModifiers:
+    - Type: {fileID: 11400000, guid: 2cc3430d2fb5d4128a504c353131914d, type: 2}
+      Multiplier: 0.85
+    - Type: {fileID: 11400000, guid: 80cd7d932254c478fb58a0cb79515791, type: 2}
+      Multiplier: 0.85
+  uiSprite: {fileID: 0}
+  bulletPrefab: {fileID: 7542543265776868388, guid: 58b6886d4b7c149a788b8cdcde2545ab, type: 3}
+  speedMultiplier: 1.5

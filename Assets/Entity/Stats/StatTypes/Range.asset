@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b22b6f25da34a39a7ca8c01f5e3e43c, type: 3}
-  m_Name: DefaultProjectile
+  m_Script: {fileID: 11500000, guid: ae6be0c8f3d74eea83b79429ec99494e, type: 3}
+  m_Name: Range
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 7542543265776868388, guid: 1d24678a1f4c84082af795f1a445fd72, type: 3}
-  speedMultiplier: 2

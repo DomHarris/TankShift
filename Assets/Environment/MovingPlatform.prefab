@@ -129,7 +129,7 @@ MonoBehaviour:
   distanceBetweenRaysVertical: 0.25
   passengerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1280
 --- !u!114 &1225216402
 MonoBehaviour:
   m_ObjectHideFlags: 0

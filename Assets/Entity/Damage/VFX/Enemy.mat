@@ -43,7 +43,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _FlashAmount: 0
+    - _SwapColor: 0
     m_Colors:
     - _Color: {r: 0.77254903, g: 0.32156864, b: 0.2901961, a: 1}
     - _FlashColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Primary: {r: 1, g: 1, b: 1, a: 1}
+    - _Secondary: {r: 1, g: 1, b: 1, a: 1}
+    - _Tertiary: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -3,6 +3,12 @@ using UnityEngine.InputSystem;
 
 namespace Entity
 {
+    public class EntityGiveWeaponOnDeath : MonoBehaviour
+    {
+        
+    }
+    
+    
     /// <summary>
     /// Enemy entity moves in relation to player
     /// </summary>

@@ -80,7 +80,9 @@ namespace Entity.Stats.Editor
             position.x += position.width + spacing;
             position.width = buttonSize;
             position.height -= 3f;
-            
+
+            if (list[currentIdx] == null)
+                return;
             // create a new serialized object for the current property
             // this way, we can find the `initialValue` property more easily
             var serialized = new SerializedObject(list[currentIdx]);

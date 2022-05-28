@@ -21,7 +21,7 @@ namespace Weapons.Bullets
         private static Dictionary<ParticleSystem, ParticleSystem[]> _particleSystems = new Dictionary<ParticleSystem, ParticleSystem[]>();
         
         [SerializeField, Tooltip("A prefab for the explosion")] 
-        private ParticleSystem explosionPrefab;
+        protected ParticleSystem explosionPrefab;
         
         [SerializeField, Tooltip("How many particles do we want to spawn for each particle system?")]
         private List<int> particleCount;
@@ -85,12 +85,8 @@ namespace Weapons.Bullets
         {
             _impact.Hit -= ImpactOnHit;
         }
-    
-        /// <summary>
-        /// When the object hits something
-        /// </summary>
-        /// <param name="damagePacket">information about the collision</param>
-        private void ImpactOnHit(HitData damagePacket)
+
+        protected void ShowExplosion()
         {
             // foreach particle system
             for (var i = 0; i < _particleSystems[explosionPrefab].Length; i++)
@@ -100,9 +96,22 @@ namespace Weapons.Bullets
                 // emit the particles
                 _particleSystems[explosionPrefab][i].Emit(particleCount[i]);
             }
+        }
 
+        protected void ShowDebris()
+        {
             // spawn a debris object
             LeanPool.Spawn(debris, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+        }
+        
+        /// <summary>
+        /// When the object hits something
+        /// </summary>
+        /// <param name="damagePacket">information about the collision</param>
+        protected virtual void ImpactOnHit(HitData damagePacket)
+        {
+            ShowExplosion();
+            ShowDebris();
         }
 
     }

@@ -18,11 +18,11 @@ namespace Bullets
         public static bool CalculateTrajectory(Vector3 start, Vector3 end, float velocity, out float angle)
         {
             Vector3 dir = end - start;
+            float g = -Physics.gravity.y;
             float vSqr = velocity * velocity;
             float y = dir.y;
             dir.y = 0.0f;
             float x = dir.sqrMagnitude;
-            float g = -Physics.gravity.y;
 
             float uRoot = vSqr * vSqr - g * (g * (x) + (2.0f * y * vSqr));
 
@@ -38,7 +38,43 @@ namespace Bullets
             float r = Mathf.Sqrt(uRoot);
             float bottom = g * Mathf.Sqrt(x);
 
-            angle = -(Mathf.Atan2(vSqr - r, bottom) * Mathf.Rad2Deg);
+            angle = -(Mathf.Atan2(vSqr - r, bottom) * Mathf.Rad2Deg)/2f;
+            return true;
+        }
+
+        public static bool CalculateTrajectory(Vector3 start, Vector3 end, float speed, out Vector3 direction)
+        {
+            Vector3 toTarget = end - start;
+
+            // Set up the terms we need to solve the quadratic equations.
+            float gSquared = Physics.gravity.sqrMagnitude;
+            float b = speed * speed + Vector3.Dot(toTarget, Physics.gravity);    
+            float discriminant = b * b - gSquared * toTarget.sqrMagnitude;
+
+            // Check whether the target is reachable at max speed or less.
+            if(discriminant < 0) {
+                // Target is too far away to hit at this speed.
+                // Abort, or fire at max speed in its general direction?
+                direction = Vector3.right;
+                return false;
+            }
+
+            float discRoot = Mathf.Sqrt(discriminant);
+
+            // Highest shot with the given max speed:
+            float T_max = Mathf.Sqrt((b + discRoot) * 2f / gSquared);
+
+            // Most direct shot with the given max speed:
+            float T_min = Mathf.Sqrt((b - discRoot) * 2f / gSquared);
+
+            // Lowest-speed arc available:
+            float T_lowEnergy = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * 4f/gSquared));
+
+            float T = T_min;// choose T_max, T_min, or some T in-between like T_lowEnergy
+
+            // Convert from time-to-hit to a launch velocity:
+            direction = toTarget / T - Physics.gravity * T / 2f;
+            direction /= speed;
             return true;
         }
 
@@ -55,7 +91,7 @@ namespace Bullets
         public static Vector3[] GetBallisticPath(Vector3 startPos, Vector3 forward, float velocity, float timeResolution, float maxTime = Mathf.Infinity)
         {
 
-            maxTime = Mathf.Min(maxTime, GetTimeOfFlight(velocity, forward, startPos.y));
+            //maxTime = Mathf.Min(maxTime, GetTimeOfFlight(velocity, forward, startPos.y));
             Vector3[] positions = new Vector3[Mathf.CeilToInt(maxTime / timeResolution)];
             Vector3 velVector = forward * velocity;
             int index = 0;

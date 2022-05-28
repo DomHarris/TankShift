@@ -66,6 +66,7 @@ namespace Entity
             float directionX = Mathf.Sign(velocity.x);
             float directionY = Mathf.Sign(velocity.y);
 
+            // vertically moving platform
             if (!Mathf.Approximately(velocity.y, 0))
             {
                 // how far should we check? 
@@ -106,8 +107,46 @@ namespace Entity
                 }
             }
 
-            if (Mathf.Approximately(velocity.y, -1) ||
-                Mathf.Approximately(velocity.y, 0) && !Mathf.Approximately(velocity.x, 0))
+            if (!Mathf.Approximately(velocity.x, 0))
+            {
+                // how far should we check? 
+                float rayLength = Mathf.Abs(velocity.x) + SkinWidth;
+
+                // for each ray
+                for (int i = 0; i < _horizontalRayCount; ++i)
+                {
+                    // if we're going left, use the bottom left corner. If we're going right, use the bottom right corner
+                    var origin = Mathf.Approximately(directionX, -1)
+                        ? _raycastOrigins.BottomLeft
+                        : _raycastOrigins.BottomRight;
+
+                    // space the rays out based on out horizontal ray spacing
+                    origin += Vector2.up * (_horizontalRaySpacing * i);
+
+                    // fire the ray, see what it hits
+                    var numHits = Physics2D.RaycastNonAlloc(origin, Vector2.right * directionX, _results, rayLength, passengerMask);
+                    if (numHits > 0) // we hit something!
+                    {
+                        var entity = _results[0].transform.GetComponent<CollisionEntity>();
+                        if (entity != null && !_passengers.Contains(entity))
+                        {
+                            _passengers.Add(entity);
+                            var pushX = velocity.x - (_results[0].distance - SkinWidth) * directionX;
+                            var pushY = 0;
+                            _passengerMovements.Add(new PassengerMovement
+                            {
+                                Transform = entity.transform,
+                                Velocity = new Vector3(pushX, pushY),
+                                CollisionEntity = entity,
+                                OnPlatform = Mathf.Approximately(directionY, 1),
+                                MoveBefore = true
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (Mathf.Approximately(directionY, -1) || Mathf.Approximately(velocity.y, 0) && !Mathf.Approximately(velocity.x, 0))
             {
                 // how far should we check? 
                 float rayLength = SkinWidth * 2;
