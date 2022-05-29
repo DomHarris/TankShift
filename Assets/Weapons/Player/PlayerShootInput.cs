@@ -18,15 +18,15 @@ namespace Bullets.Player
         [SerializeField, Tooltip("The easing function to use for lerping between the two shoot forces")] 
         private Ease ease;
 
-        [Header("Shooting"), SerializeField, Tooltip("How long will it take to charge the shot?")]
+        [Header("Shooting"), SerializeField, Tooltip("How long will it take to charge the shot?"), StatTypeWithParent]
         private StatType maxChargeTime;
         private float MaxChargeTime => _stats.GetStat(maxChargeTime);
         
         
-        [SerializeField, Tooltip("What shoot force should we use if the player immediately releases the button?")] 
+        [SerializeField, Tooltip("What shoot force should we use if the player immediately releases the button?"), StatTypeWithParent] 
         private StatType minShootForce;
         private float MinShootForce => _stats.GetStat(minShootForce);
-        [SerializeField, Tooltip("What shoot force should we use if the player holds the button for MaxChargeTime?")] 
+        [SerializeField, Tooltip("What shoot force should we use if the player holds the button for MaxChargeTime?"), StatTypeWithParent] 
         private StatType maxShootForce;
         private float MaxShootForce => _stats.GetStat(maxShootForce);
         #endregion
@@ -61,9 +61,9 @@ namespace Bullets.Player
         /// Get the current force to use for shooting the bullet
         /// </summary>
         /// <returns></returns>
-        public override float GetShootForce()
+        public override Vector3 GetShootForce()
         {
-            return Mathf.Lerp(MinShootForce, MaxShootForce, GetPercentage());
+            return Vector3.Lerp(MinShootForce * transform.right, MaxShootForce * transform.right, GetPercentage());
         }
         
         /// <summary>

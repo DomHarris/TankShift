@@ -28,9 +28,10 @@ namespace Bullets
             particles.transform.position = obj.position;
             particles.Play();
             Vector3 prevPos = particles.transform.position;
+            var originalPos = obj.position;
             DOVirtual.Float(0, 1, 1f, val =>
             {
-                particles.transform.position = Vector3.Lerp(obj.position, transform.position, val);
+                particles.transform.position = Vector3.Lerp(originalPos, transform.position, val);
             }).OnUpdate(() =>
             {
                 particles.transform.right = prevPos - particles.transform.position;

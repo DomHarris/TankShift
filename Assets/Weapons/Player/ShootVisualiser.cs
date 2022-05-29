@@ -69,11 +69,11 @@ namespace Bullets.Player
         {
             var currentShootForce = _shoot.GetShootForce();
             // magic maths function to get the bullet's time of flight
-            var time = Ballistics.GetTimeOfFlight(currentShootForce, shootPoint.right, shootPoint.position.y);
+            //var time = Ballistics.GetTimeOfFlight(currentShootForce, shootPoint.right, shootPoint.position.y);
             
             // visualise the trajectory for the bullet
             // complex mathematical wizardry that gives us a bunch of Vector3 positions
-            var points = Ballistics.GetBallisticPath(shootPoint.position, shootPoint.right, currentShootForce, shootDisplayTimeDelta, time);
+            var points = Ballistics.GetBallisticPath(shootPoint.position, currentShootForce, shootDisplayTimeDelta, 5);
             
             shootDisplayMaterial.SetFloat(ChargeAmount, percentage);
             

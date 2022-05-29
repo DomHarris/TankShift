@@ -13,7 +13,7 @@ namespace Bullets.Player
         // the event to fire
         public event Action Shoot;
         #endregion
-        
+
         /// <summary>
         /// Invoke the event - used only by base classes
         /// </summary>
@@ -27,6 +27,6 @@ namespace Bullets.Player
         /// Returns how strong the current shot should be
         /// </summary>
         /// <returns>the force of the shot</returns>
-        public abstract float GetShootForce();
+        public abstract Vector3 GetShootForce();
     }
 }

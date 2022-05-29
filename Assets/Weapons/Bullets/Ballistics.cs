@@ -42,7 +42,7 @@ namespace Bullets
             return true;
         }
 
-        public static bool CalculateTrajectory(Vector3 start, Vector3 end, float speed, out Vector3 direction)
+        public static bool CalculateTrajectory(Vector3 start, Vector3 end, float speed, out Vector3 force)
         {
             Vector3 toTarget = end - start;
 
@@ -55,7 +55,7 @@ namespace Bullets
             if(discriminant < 0) {
                 // Target is too far away to hit at this speed.
                 // Abort, or fire at max speed in its general direction?
-                direction = Vector3.right;
+                force = Vector3.right;
                 return false;
             }
 
@@ -65,16 +65,15 @@ namespace Bullets
             float T_max = Mathf.Sqrt((b + discRoot) * 2f / gSquared);
 
             // Most direct shot with the given max speed:
-            float T_min = Mathf.Sqrt((b - discRoot) * 2f / gSquared);
+            //float T_min = Mathf.Sqrt((b - discRoot) * 2f / gSquared);
 
             // Lowest-speed arc available:
-            float T_lowEnergy = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * 4f/gSquared));
+            //float T_lowEnergy = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * 4f/gSquared));
 
-            float T = T_min;// choose T_max, T_min, or some T in-between like T_lowEnergy
+            float T = T_max;// choose T_max, T_min, or some T in-between like T_lowEnergy
 
             // Convert from time-to-hit to a launch velocity:
-            direction = toTarget / T - Physics.gravity * T / 2f;
-            direction /= speed;
+            force = toTarget / T - (Vector3)Physics2D.gravity * T / 2f;
             return true;
         }
 
@@ -105,6 +104,28 @@ namespace Bullets
                 positions[index] = curPosition;
                 curPosition += velVector * timeResolution;
                 velVector += (Vector3)Physics2D.gravity * timeResolution;
+                index++;
+            }
+
+            return positions;
+        }
+        
+        public static Vector3[] GetBallisticPath(Vector3 startPos, Vector3 velocity, float timeResolution, float maxTime = Mathf.Infinity)
+        {
+
+            //maxTime = Mathf.Min(maxTime, GetTimeOfFlight(velocity, forward, startPos.y));
+            Vector3[] positions = new Vector3[Mathf.CeilToInt(maxTime / timeResolution)];
+            int index = 0;
+            Vector3 curPosition = startPos;
+            for (float t = 0.0f; t < maxTime; t += timeResolution)
+            {
+
+                if (index >= positions.Length)
+                    break; //rounding error using certain values for maxTime and timeResolution
+
+                positions[index] = curPosition;
+                curPosition += velocity * timeResolution;
+                velocity += (Vector3)Physics2D.gravity * timeResolution;
                 index++;
             }
 

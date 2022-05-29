@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Player.ShootForceMin
   m_EditorClassIdentifier: 
   type: {fileID: 11400000, guid: 2cc3430d2fb5d4128a504c353131914d, type: 2}
-  initialValue: 7
+  initialValue: 5

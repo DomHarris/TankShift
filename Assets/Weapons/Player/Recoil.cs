@@ -30,7 +30,7 @@ namespace Bullets.Player
         protected override void OnShoot()
         {
             // shove the entity in the opposite direction
-            entity.AddForce(-shootPoint.right * _shoot.GetShootForce() * RecoilScale );
+            entity.AddForce(-_shoot.GetShootForce() * RecoilScale );
         }
     }
 }

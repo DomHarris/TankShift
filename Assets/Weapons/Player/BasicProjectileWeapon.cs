@@ -25,7 +25,7 @@ namespace Weapons.Player
             // set gravity scale to the speed multiplier squared, then multiply the initial force by the speed multiplier
             bullet.gravityScale = speedMultiplier * speedMultiplier;
             // then multiply the shoot force by the speed multiplier
-            bullet.AddForce(_shootPoint.right * _input.GetShootForce() * speedMultiplier, ForceMode2D.Impulse);
+            bullet.AddForce(_input.GetShootForce() * speedMultiplier, ForceMode2D.Impulse);
         }
     }
 }

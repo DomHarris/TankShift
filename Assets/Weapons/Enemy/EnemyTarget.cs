@@ -56,7 +56,7 @@ namespace Bullets.Enemy
         private Vector3 _targetPos; // the current target position
         private float _timer;
         private bool _hasShot;
-
+        private Vector3 _shootForce;
         #endregion
 
 
@@ -83,16 +83,17 @@ namespace Bullets.Enemy
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(target.position, 0.1f);
             Gizmos.color = Color.white;
-            var canShoot = Ballistics.CalculateTrajectory(shootPoint.position, target.position, force, out Vector3 direction);
+            var canShoot = Ballistics.CalculateTrajectory(transform.position, target.position, force, out Vector3 direction);
             if (!canShoot) return;
             // which direction is the player?
+            direction /= force;
             var dirX = Mathf.Sign(target.position.x - transform.position.x);
 
             // the angle is only ever going to point to the right 
             // so multiply the x component by the direction we found earlier - this corrects that
             //direction.x *= dirX;
             Gizmos.DrawLine(transform.position, transform.position + (direction * 2f));
-            var points = Ballistics.GetBallisticPath(transform.position + (direction * 2f), direction, force, shootDisplayTimeDelta, 100);
+            var points = Ballistics.GetBallisticPath(transform.position, direction, force, shootDisplayTimeDelta, 100);
             foreach (var point in points)
             {
                 Gizmos.DrawSphere(point, 0.25f);
@@ -118,27 +119,24 @@ namespace Bullets.Enemy
             if (_timer < secondsOfTargeting + secondsBeforeShoot)
             {
                 // mathematical wizardry that tells us what angle to rotate the turret to
-                var canShoot = Ballistics.CalculateTrajectory(shootPoint.position, _targetPos, force, out float angle);
+                var canShoot = Ballistics.CalculateTrajectory(shootPoint.position, _targetPos, force, out _shootForce);
 
                 // if the above function passed, draw the line 
                 if (canShoot)
                 {
 
                     // which direction is the player?
-                    var dirX = Mathf.Sign(target.position.x - transform.position.x);
-
-                    // rotate the turret by -angle (because Unity rotates the wrong way ugh)
-                    var right = Quaternion.Euler(0, 0, -angle) * Vector3.right;
+                    //var dirX = Mathf.Sign(target.position.x - transform.position.x);
 
                     // the angle is only ever going to point to the right 
                     // so multiply the x component by the direction we found earlier - this corrects that
-                    right.x *= dirX;
-                    transform.right = right;
+                    //right.x *= dirX;
+                    transform.right = _shootForce;
 
                     // visualise the trajectory for the bullet
                     // complex mathematical wizardry that gives us a bunch of Vector3 positions
-                    var points = Ballistics.GetBallisticPath(shootPoint.position, shootPoint.right, force,
-                        shootDisplayTimeDelta, 2);
+                    var points = Ballistics.GetBallisticPath(shootPoint.position, _shootForce,
+                        shootDisplayTimeDelta, 5);
                     line.positionCount = points.Length;
                     // set the positions on the line renderer
                     line.SetPositions(points);
@@ -167,9 +165,9 @@ namespace Bullets.Enemy
 
         }
 
-        public override float GetShootForce()
+        public override Vector3 GetShootForce()
         {
-            return force;
+            return _shootForce;
         }
     }
 }
