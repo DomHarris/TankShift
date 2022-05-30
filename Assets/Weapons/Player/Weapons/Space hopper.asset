@@ -37,6 +37,6 @@ MonoBehaviour:
       Multiplier: 1.1
     - Type: {fileID: 11400000, guid: 80cd7d932254c478fb58a0cb79515791, type: 2}
       Multiplier: 1.1
-  uiSprite: {fileID: 3625043607559282579, guid: 07ec0068c0a9c45b1a5850223d446949, type: 3}
+  uiSprite: {fileID: -2413806693520163455, guid: d96b237ce2cc8452d961bc8557bae25a, type: 3}
   bulletPrefab: {fileID: 7542543265776868388, guid: 6fc2f46a3ab894ddaa2944b8c0ba0cc0, type: 3}
   speedMultiplier: 3
