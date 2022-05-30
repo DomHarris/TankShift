@@ -81,47 +81,53 @@ public class LoadingScreen : MonoBehaviour
         wholeScreen.blocksRaycasts = false;
 
         if (!skip)
+        {
             yield return new WaitForSeconds(3f);
 
-        textBox.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack);
-        yield return new WaitForSeconds(0.5f);
-        
-        foreach (var page in speech)
-        {
-            var counter = 0;
-            var currentPos = 0;
+            textBox.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.5f);
 
-            foreach (var breakpoint in page.BreakPoints)
+            foreach (var page in speech)
             {
-                text.text = page.Body;
-                text.color = page.Color;
-                // while there are still characters to reveal, and no key was pressed
-                while (counter < breakpoint + currentPos && !_keyPressed)
+                var counter = 0;
+                var currentPos = 0;
+
+                foreach (var breakpoint in page.BreakPoints)
                 {
-                    // set the maximum amount of characters to see
-                    text.maxVisibleCharacters = counter;
-                    counter += lettersToRevealPerTick;
-
-                    for (int i = 0; i < ticksPerReveal; ++i)
+                    text.text = page.Body;
+                    text.color = page.Color;
+                    // while there are still characters to reveal, and no key was pressed
+                    while (counter < breakpoint + currentPos && !_keyPressed)
                     {
-                        // wait a frame
-                        yield return null;
+                        // set the maximum amount of characters to see
+                        text.maxVisibleCharacters = counter;
+                        counter += lettersToRevealPerTick;
+
+                        for (int i = 0; i < ticksPerReveal; ++i)
+                        {
+                            // wait a frame
+                            yield return null;
+                        }
                     }
+
+                    _keyPressed = false;
+                    // show all characters
+                    text.maxVisibleCharacters = breakpoint + currentPos;
+                    currentPos = breakpoint + currentPos;
+                    counter = currentPos;
+
+                    while (!_keyPressed)
+                        yield return null;
+                    _keyPressed = false;
                 }
-
-                _keyPressed = false;
-                // show all characters
-                text.maxVisibleCharacters = breakpoint + currentPos;
-                currentPos = breakpoint + currentPos;
-                counter = currentPos;
-
-                while (!_keyPressed)
-                    yield return null;
-                _keyPressed = false;
             }
         }
+
         glow.SetActive(false);
-        textBox.DOAnchorPosY(-textBox.rect.height, 0.5f).SetEase(Ease.InBack);
+        
+        if (!skip)
+            textBox.DOAnchorPosY(-textBox.rect.height, 0.5f).SetEase(Ease.InBack);
+        
         foreach (var behaviour in playerComponentsToDisable)
             behaviour.enabled = true;
     }

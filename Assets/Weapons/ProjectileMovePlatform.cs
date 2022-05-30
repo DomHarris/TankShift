@@ -48,6 +48,9 @@ namespace Weapons
         private void OnDrawGizmos()
         {
             Debug.DrawLine(transform.position, platform.position);
+            Gizmos.DrawWireCube(platform.position, platform.GetComponent<BoxCollider2D>().size);
+            Gizmos.DrawWireCube(endPos, platform.GetComponent<BoxCollider2D>().size);
+            startPos = platform.position;
         }
     }
 }

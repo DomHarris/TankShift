@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Player.MaxHealth
   m_EditorClassIdentifier: 
   type: {fileID: 11400000, guid: 4ad60c15059774e91a5dae3aacc99513, type: 2}
-  initialValue: 10
+  initialValue: 3

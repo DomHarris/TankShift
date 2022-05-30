@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Bullets;
 using Entity.Damage;
 using Lean.Pool;
@@ -41,7 +42,7 @@ namespace Weapons.Bullets
             if (!_particleSystems.ContainsKey(explosionPrefab))
                 _particleSystems.Add(explosionPrefab, Instantiate(explosionPrefab).GetComponentsInChildren<ParticleSystem>());
         }
-        
+
         /// <summary>
         /// Called when something changes in the editor
         /// Set the particle count array to the length of the number of particle systems attached to the object
@@ -74,8 +75,10 @@ namespace Weapons.Bullets
         /// </summary>
         private void OnEnable()
         {
+            if (_particleSystems[explosionPrefab].Any(p => p == null))
+                _particleSystems[explosionPrefab] = Instantiate(explosionPrefab).GetComponentsInChildren<ParticleSystem>();
             _impact.Hit += ImpactOnHit;
-        }
+        } 
 
         /// <summary>
         /// Called when the object is disabled

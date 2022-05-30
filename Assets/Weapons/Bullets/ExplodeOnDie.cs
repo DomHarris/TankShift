@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Entity.Damage;
 using Lean.Pool;
 using UnityEngine;
@@ -73,6 +74,8 @@ namespace Weapons.Bullets
         /// </summary>
         private void OnEnable()
         {
+            if (_particleSystems[explosionPrefab].Any(p => p == null))
+                _particleSystems[explosionPrefab] = Instantiate(explosionPrefab).GetComponentsInChildren<ParticleSystem>();
             _health.OnHit += OnHit;   
         }
 
