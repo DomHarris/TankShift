@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,13 +14,21 @@ namespace Bullets.Player
         [SerializeField] private float minAngle;
         [SerializeField] private float maxAngle = 90;
         [SerializeField] private Camera mainCam;
+        [SerializeField] private SpriteRenderer body;
+        [SerializeField] private Transform eye;
         #endregion
         
         // Private fields - only used in this script
         #region PrivateFields
         private Vector3 _inputPos;
+        private float _originalEyeXpos;
         #endregion
-        
+
+        private void Awake()
+        {
+            _originalEyeXpos = eye.localPosition.x;
+        }
+
         /// <summary>
         /// Called every frame.
         /// Rotate the object with the input's mouse position
@@ -57,6 +66,17 @@ namespace Bullets.Player
                 Vector3 maxAngleDirection = Quaternion.Euler (0,0,maxAngle * Mathf.Sign(-direction.x)) * transform.parent.up;
                 transform.right = maxAngleDirection;
             }
+
+            if (direction.x > 0)
+                body.flipX = false;
+            
+
+            if (direction.x < 0)
+                body.flipX = true;
+            
+            var pos = eye.localPosition;
+            pos.x = Mathf.Sign(direction.x) * _originalEyeXpos;
+            eye.localPosition = pos;
         }
 
         /// <summary>

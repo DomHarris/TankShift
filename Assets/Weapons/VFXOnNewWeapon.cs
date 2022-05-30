@@ -32,11 +32,8 @@ namespace Bullets
             DOVirtual.Float(0, 1, 1f, val =>
             {
                 particles.transform.position = Vector3.Lerp(originalPos, transform.position, val);
-            }).OnUpdate(() =>
-            {
                 particles.transform.right = prevPos - particles.transform.position;
                 prevPos = particles.transform.position;
-
             }).SetEase(Ease.InQuint).OnComplete(() => endParticles.Emit(100));
         }
     }

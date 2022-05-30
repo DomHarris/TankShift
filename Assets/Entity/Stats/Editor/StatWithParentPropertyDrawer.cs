@@ -22,6 +22,7 @@ namespace Entity.Stats.Editor
             position.width = buttonSize;
 
             var statController = ((MonoBehaviour)target).GetComponentInParent<StatController>();
+            if (statController == null) return;
             var statControllerSO = new SerializedObject(statController);
             if (statControllerSO.FindProperty("stats").objectReferenceValue == null) return;
             

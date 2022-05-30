@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Player.JetpackForce
   m_EditorClassIdentifier: 
   type: {fileID: 11400000, guid: 2fad307f7c6f44c8fb7c3f9270762635, type: 2}
-  initialValue: 8
+  initialValue: 2

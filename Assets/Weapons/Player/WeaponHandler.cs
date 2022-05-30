@@ -70,7 +70,7 @@ namespace Weapons.Player
             return _currentWeapon == weapon;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             if (_currentWeapon != null)
                 _currentWeapon.Dispose();
